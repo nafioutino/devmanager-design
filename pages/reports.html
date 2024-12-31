@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapports - DevManager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="p-6">
+        <!-- En-tête avec options d'export -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Rapport Complet</h1>
+                <p class="text-gray-600">Vue détaillée de toutes les activités</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <select id="date-range" class="px-4 py-2 border rounded-lg bg-white">
+                    <option value="week">Cette semaine</option>
+                    <option value="month">Ce mois</option>
+                    <option value="quarter">Ce trimestre</option>
+                    <option value="year">Cette année</option>
+                </select>
+                <div class="relative">
+                    <button id="export-btn" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <i class="ri-download-line mr-2"></i>
+                        Exporter le rapport
+                    </button>
+                    <div id="export-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10">
+                        <div class="py-1">
+                            <button class="export-option w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center" data-format="pdf">
+                                <i class="ri-file-pdf-line mr-2 text-red-600"></i> Format PDF
+                            </button>
+                            <button class="export-option w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center" data-format="excel">
+                                <i class="ri-file-excel-line mr-2 text-green-600"></i> Format Excel
+                            </button>
+                            <button class="export-option w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center" data-format="csv">
+                                <i class="ri-file-text-line mr-2 text-gray-600"></i> Format CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation des sections -->
+        <div class="flex space-x-4 mb-6">
+            <button class="report-nav-btn px-4 py-2 rounded-lg bg-blue-600 text-white" data-section="overview">Vue d'ensemble</button>
+            <button class="report-nav-btn px-4 py-2 rounded-lg bg-gray-200" data-section="projects">Projets</button>
+            <button class="report-nav-btn px-4 py-2 rounded-lg bg-gray-200" data-section="developers">Développeurs</button>
+            <button class="report-nav-btn px-4 py-2 rounded-lg bg-gray-200" data-section="tasks">Tâches</button>
+        </div>
+
+        <!-- Section Vue d'ensemble -->
+        <div id="overview-section" class="report-section">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Statistiques Globales -->
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Statistiques Globales</h3>
+                        <i class="ri-bar-chart-box-line text-2xl text-blue-600"></i>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Total Projets</span>
+                            <span class="font-semibold text-lg" id="total-projects">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Développeurs Actifs</span>
+                            <span class="font-semibold text-lg" id="active-devs">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Tâches en Cours</span>
+                            <span class="font-semibold text-lg" id="active-tasks">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance -->
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Performance</h3>
+                        <i class="ri-line-chart-line text-2xl text-green-600"></i>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Taux de Complétion</span>
+                            <span class="font-semibold text-lg" id="completion-rate">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Délai Moyen</span>
+                            <span class="font-semibold text-lg" id="avg-time">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Satisfaction</span>
+                            <span class="font-semibold text-lg" id="satisfaction">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertes -->
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Alertes Récentes</h3>
+                        <i class="ri-notification-3-line text-2xl text-yellow-600"></i>
+                    </div>
+                    <div id="alerts-list" class="space-y-3">
+                        <!-- Les alertes seront ajoutées ici -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Projets -->
+        <div id="projects-section" class="report-section hidden">
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">Liste des Projets</h3>
+                        <span class="text-sm text-gray-500">Affichage de <span id="projects-start">1</span> à <span id="projects-end">10</span> sur <span id="projects-total">-</span> projets</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full" id="projects-table">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">État</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chef de Projet</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progression</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Limite</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Les projets seront ajoutés ici -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 border-t">
+                    <div class="flex items-center justify-center space-x-2">
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50" id="projects-prev">
+                            <i class="ri-arrow-left-s-line"></i> Précédent
+                        </button>
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50" id="projects-next">
+                            Suivant <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Développeurs -->
+        <div id="developers-section" class="report-section hidden">
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">Performance des Développeurs</h3>
+                        <span class="text-sm text-gray-500">Affichage de <span id="devs-start">1</span> à <span id="devs-end">10</span> sur <span id="devs-total">-</span> développeurs</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full" id="developers-table">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Développeur</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spécialité</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Projets</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tâches Complétées</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Performance</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Évaluation</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Les développeurs seront ajoutés ici -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 border-t">
+                    <div class="flex items-center justify-center space-x-2">
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50" id="devs-prev">
+                            <i class="ri-arrow-left-s-line"></i> Précédent
+                        </button>
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50" id="devs-next">
+                            Suivant <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Tâches -->
+        <div id="tasks-section" class="report-section hidden">
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">Suivi des Tâches</h3>
+                        <span class="text-sm text-gray-500">Affichage de <span id="tasks-start">1</span> à <span id="tasks-end">10</span> sur <span id="tasks-total">-</span> tâches</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full" id="tasks-table">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tâche</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Projet</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigné à</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">État</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Limite</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Les tâches seront ajoutées ici -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 border-t">
+                    <div class="flex items-center justify-center space-x-2">
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50" id="tasks-prev">
+                            <i class="ri-arrow-left-s-line"></i> Précédent
+                        </button>
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50" id="tasks-next">
+                            Suivant <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/forms/reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Développeurs - DevManager</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <h1 class="text-xl font-bold">DevManager</h1>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="projects.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Projets</a>
+                        <a href="developers.html" class="text-blue-500 border-b-2 border-blue-500 px-3 py-2 rounded-md text-sm font-medium">Développeurs</a>
+                        <a href="tasks.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Tâches</a>
+                        <a href="reports.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Rapports</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Développeurs</h2>
+            <button type="button" id="add-developer-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                <i class="ri-add-line mr-1"></i>
+                Ajouter un développeur
+            </button>
+        </div>
+
+        <!-- Section de recherche et filtrage -->
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Barre de recherche -->
+                <div class="flex-1">
+                    <div class="relative">
+                        <input type="text" id="dev-search" placeholder="Rechercher un développeur..." class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <i class="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Filtres -->
+                <div class="flex flex-wrap gap-3">
+                    <!-- Spécialité -->
+                    <select id="filter-speciality" class="px-4 py-2 border rounded-lg bg-white">
+                        <option value="">Spécialité</option>
+                        <option value="frontend">Frontend</option>
+                        <option value="backend">Backend</option>
+                        <option value="fullstack">Full-stack</option>
+                        <option value="mobile">Mobile</option>
+                        <option value="devops">DevOps</option>
+                    </select>
+
+                    <!-- Expérience -->
+                    <select id="filter-experience" class="px-4 py-2 border rounded-lg bg-white">
+                        <option value="">Expérience</option>
+                        <option value="junior">Junior (0-2 ans)</option>
+                        <option value="intermediate">Intermédiaire (3-5 ans)</option>
+                        <option value="senior">Senior (6+ ans)</option>
+                    </select>
+
+                    <!-- Disponibilité -->
+                    <select id="filter-availability" class="px-4 py-2 border rounded-lg bg-white">
+                        <option value="">Disponibilité</option>
+                        <option value="available">Disponible</option>
+                        <option value="partial">Partiellement occupé</option>
+                        <option value="busy">Occupé</option>
+                    </select>
+
+                    <!-- Tri -->
+                    <select id="sort-developers" class="px-4 py-2 border rounded-lg bg-white">
+                        <option value="">Trier par</option>
+                        <option value="name-asc">Nom (A-Z)</option>
+                        <option value="name-desc">Nom (Z-A)</option>
+                        <option value="rating-desc">Évaluation (Meilleure)</option>
+                        <option value="rating-asc">Évaluation (Moins bonne)</option>
+                        <option value="projects-desc">Projets (Plus)</option>
+                        <option value="projects-asc">Projets (Moins)</option>
+                    </select>
+
+                    <!-- Bouton de réinitialisation -->
+                    <button id="reset-filters" class="px-4 py-2 border rounded-lg hover:bg-gray-50 text-gray-600">
+                        <i class="ri-refresh-line mr-1"></i>
+                        Réinitialiser
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tags de filtres actifs -->
+            <div id="active-filters" class="flex flex-wrap gap-2 mt-4">
+                <!-- Les tags seront ajoutés dynamiquement ici -->
+            </div>
+        </div>
+
+        <!-- Grille des développeurs -->
+        <div class="developers-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <!-- Les cartes des développeurs seront ajoutées dynamiquement ici -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination flex items-center justify-between p-4 bg-white rounded-lg shadow">
+            <button id="prev-page" class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="ri-arrow-left-line mr-1"></i>
+                Précédent
+            </button>
+            <span id="page-info" class="text-gray-600"></span>
+            <button id="next-page" class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                Suivant
+                <i class="ri-arrow-right-line ml-1"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../js/forms/developers.js"></script>
+</body>
+</html>

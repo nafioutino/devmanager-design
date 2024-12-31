@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevManager - HighFive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jkanban@1.3.1/dist/jkanban.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+        .sidebar-link:hover {
+            background-color: #2563EB;
+            color: white;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white h-full border-r border-gray-200">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold text-gray-800">DevManager</h1>
+        </div>
+        <nav class="mt-6">
+            <a href="index.html" class="sidebar-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-600 hover:text-white transition-colors active" data-page="dashboard">
+                <i class="ri-dashboard-line mr-3"></i>
+                Dashboard
+            </a>
+            <a href="pages/tasks.html" class="sidebar-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-600 hover:text-white transition-colors" data-page="tasks">
+                <i class="ri-task-line mr-3"></i>
+                Tâches
+            </a>
+            <a href="pages/projects.html" class="sidebar-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-600 hover:text-white transition-colors" data-page="projects">
+                <i class="ri-project-line mr-3"></i>
+                Projets
+            </a>
+            <a href="pages/reports.html" class="sidebar-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-600 hover:text-white transition-colors" data-page="reports">
+                <i class="ri-file-chart-line mr-3"></i>
+                Rapports
+            </a>
+            <a href="pages/developers.html" class="sidebar-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-600 hover:text-white transition-colors" data-page="developers">
+                <i class="ri-team-line mr-3"></i>
+                Développeurs
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <!-- Top Bar -->
+        <header class="bg-white border-b border-gray-200 p-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="Rechercher..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <i class="ri-search-line absolute left-3 top-2.5 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 hover:bg-gray-100 rounded-full">
+                        <i class="ri-notification-3-line text-gray-600"></i>
+                    </button>
+                    <div class="flex items-center">
+                        <img src="https://ui-avatars.com/api/?name=John+Doe" alt="Profile" class="w-8 h-8 rounded-full">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h2>
+            
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="card p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Tâches en cours</p>
+                            <h3 class="text-2xl font-bold text-gray-800">24</h3>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i class="ri-task-line text-blue-600"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Projets actifs</p>
+                            <h3 class="text-2xl font-bold text-gray-800">8</h3>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i class="ri-project-line text-green-600"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Développeurs</p>
+                            <h3 class="text-2xl font-bold text-gray-800">12</h3>
+                        </div>
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <i class="ri-team-line text-purple-600"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Taux de complétion</p>
+                            <h3 class="text-2xl font-bold text-gray-800">78%</h3>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-full">
+                            <i class="ri-pie-chart-line text-yellow-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="card p-6 h-[400px]">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Performance des projets</h4>
+                    <div class="h-[300px]">
+                        <canvas id="projectsChart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-6 h-[400px]">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Tâches par statut</h4>
+                    <div class="h-[300px]">
+                        <canvas id="tasksChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Tasks -->
+            <div class="card p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-lg font-semibold text-gray-800">Tâches récentes</h4>
+                    <button class="text-blue-600 hover:text-blue-700">Voir tout</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-sm text-gray-600">
+                                <th class="pb-3">Tâche</th>
+                                <th class="pb-3">Assigné à</th>
+                                <th class="pb-3">Statut</th>
+                                <th class="pb-3">Date limite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t border-gray-100">
+                                <td class="py-3">Mise à jour API</td>
+                                <td class="py-3">
+                                    <div class="flex items-center">
+                                        <img src="https://ui-avatars.com/api/?name=John+Doe" alt="John Doe" class="w-6 h-6 rounded-full mr-2">
+                                        <span>John Doe</span>
+                                    </div>
+                                </td>
+                                <td class="py-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">En cours</span></td>
+                                <td class="py-3 text-gray-600">Dec 31, 2024</td>
+                            </tr>
+                            <tr class="border-t border-gray-100">
+                                <td class="py-3">Design Dashboard</td>
+                                <td class="py-3">
+                                    <div class="flex items-center">
+                                        <img src="https://ui-avatars.com/api/?name=Jane+Smith" alt="Jane Smith" class="w-6 h-6 rounded-full mr-2">
+                                        <span>Jane Smith</span>
+                                    </div>
+                                </td>
+                                <td class="py-3"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Terminé</span></td>
+                                <td class="py-3 text-gray-600">Dec 30, 2024</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<script src="js/main.js" defer></script>
+<script src="js/interactions.js" defer></script>
+<script>
+    // Configuration des graphiques
+    const projectsCtx = document.getElementById('projectsChart').getContext('2d');
+    const tasksCtx = document.getElementById('tasksChart').getContext('2d');
+
+    // Graphique des projets
+    new Chart(projectsCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+            datasets: [{
+                label: 'Performance',
+                data: [65, 59, 80, 81, 56, 85],
+                borderColor: '#2563EB',
+                tension: 0.4,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Graphique des tâches
+    new Chart(tasksCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['En cours', 'Terminé', 'En retard'],
+            datasets: [{
+                data: [12, 19, 3],
+                backgroundColor: [
+                    '#FCD34D',
+                    '#34D399',
+                    '#EF4444'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+</script>
+</html>

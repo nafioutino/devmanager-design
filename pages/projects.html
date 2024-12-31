@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+        .sidebar-link:hover {
+            background-color: #2563EB;
+            color: white;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Projets</h2>
+            <button id="new-project-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                <i class="ri-add-line mr-2"></i>
+                Nouveau projet
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Les projets seront ajoutés ici dynamiquement -->
+        </div>
+
+        <div id="new-project-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">Nouveau projet</h3>
+                    <button type="button" class="close-modal text-gray-600 hover:text-gray-800">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+                <form id="new-project-form">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Nom du projet</label>
+                        <input type="text" name="title" required class="w-full px-3 py-2 border rounded-lg">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                        <textarea name="description" required class="w-full px-3 py-2 border rounded-lg" rows="3"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Chef de projet</label>
+                        <select name="manager" required class="w-full px-3 py-2 border rounded-lg">
+                            <option value="">Sélectionner un chef de projet</option>
+                            <option value="John Doe">John Doe</option>
+                            <option value="Jane Smith">Jane Smith</option>
+                            <option value="Mike Johnson">Mike Johnson</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Équipe</label>
+                        <select name="team" multiple required class="w-full px-3 py-2 border rounded-lg" size="4">
+                            <option value="John Doe">John Doe</option>
+                            <option value="Jane Smith">Jane Smith</option>
+                            <option value="Sarah Brown">Sarah Brown</option>
+                            <option value="Tom Wilson">Tom Wilson</option>
+                            <option value="Emily Davis">Emily Davis</option>
+                            <option value="David Miller">David Miller</option>
+                        </select>
+                        <p class="text-sm text-gray-500 mt-1">Maintenez Ctrl pour sélectionner plusieurs membres</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Date de début</label>
+                            <input type="date" name="startDate" required class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Date limite</label>
+                            <input type="date" name="deadline" required class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-4 mt-6">
+                        <button type="button" class="close-modal px-4 py-2 text-gray-600 hover:text-gray-800">
+                            Annuler
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Créer le projet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/forms/projects.js"></script>
+</body>
+</html>

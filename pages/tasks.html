@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taches</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jkanban@1.3.1/dist/jkanban.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+        .sidebar-link:hover {
+            background-color: #2563EB;
+            color: white;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Tâches</h2>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center" id="new-task-btn">
+                <i class="ri-add-line mr-2"></i>
+                Nouvelle tâche
+            </button>
+        </div>
+
+        <!-- Filtres -->
+        <div class="flex space-x-4 mb-6">
+            <button class="filter-btn px-4 py-2 rounded-lg bg-blue-600 text-white" data-filter="all">Toutes</button>
+            <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200" data-filter="high">Haute priorité</button>
+            <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200" data-filter="medium">Moyenne priorité</button>
+            <button class="filter-btn px-4 py-2 rounded-lg bg-gray-200" data-filter="low">Basse priorité</button>
+        </div>
+
+        <!-- Colonnes Kanban -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Colonne À faire -->
+            <div class="task-column bg-gray-100 p-4 rounded-lg" data-status="todo">
+                <h3 class="text-lg font-semibold mb-4">À faire</h3>
+                <div class="space-y-4">
+                    <!-- Les tâches seront ajoutées ici dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Colonne En cours -->
+            <div class="task-column bg-gray-100 p-4 rounded-lg" data-status="in-progress">
+                <h3 class="text-lg font-semibold mb-4">En cours</h3>
+                <div class="space-y-4">
+                    <!-- Les tâches seront ajoutées ici dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Colonne Terminé -->
+            <div class="task-column bg-gray-100 p-4 rounded-lg" data-status="done">
+                <h3 class="text-lg font-semibold mb-4">Terminé</h3>
+                <div class="space-y-4">
+                    <!-- Les tâches seront ajoutées ici dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de création/édition de tâche -->
+    <div id="task-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Nouvelle Tâche</h3>
+                <form id="task-form">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Titre de la tâche
+                        </label>
+                        <input type="text" name="title" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Description
+                        </label>
+                        <textarea name="description" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" rows="3"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Projet
+                        </label>
+                        <select name="project" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                            <option value="">Sélectionner un projet</option>
+                            <option value="Refonte API">Refonte API</option>
+                            <option value="Dashboard Analytics">Dashboard Analytics</option>
+                            <option value="Application Mobile">Application Mobile</option>
+                            <option value="Site E-commerce">Site E-commerce</option>
+                            <option value="CRM Integration">CRM Integration</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Assigné à
+                        </label>
+                        <select name="assignee" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                            <option value="">Sélectionner un développeur</option>
+                            <option value="John Doe">John Doe - Full Stack Developer</option>
+                            <option value="Jane Smith">Jane Smith - Frontend Developer</option>
+                            <option value="Mike Johnson">Mike Johnson - Backend Developer</option>
+                            <option value="Sarah Brown">Sarah Brown - UI/UX Designer</option>
+                            <option value="Tom Wilson">Tom Wilson - DevOps Engineer</option>
+                            <option value="Emily Davis">Emily Davis - Mobile Developer</option>
+                            <option value="David Miller">David Miller - QA Engineer</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Priorité
+                        </label>
+                        <select name="priority" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                            <option value="high">Haute</option>
+                            <option value="medium">Moyenne</option>
+                            <option value="low">Basse</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Date limite
+                        </label>
+                        <input type="date" name="deadline" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" class="px-4 py-2 text-gray-600 hover:text-gray-800 close-modal">
+                            Annuler
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Créer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inclusion des scripts -->
+    <script src="../js/forms/tasks.js"></script>
+</body>
